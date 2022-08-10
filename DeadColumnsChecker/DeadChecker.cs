@@ -1,12 +1,13 @@
 ﻿using DeadColumnsChecker.Model;
 using DeadColumnsChecker.Reader;
+using DeadColumnsChecker.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeadColumnsChecker;
 
 public static class DeadChecker
 {
-    public static DccResult CheckDeadColumns(this DbContext dbContext, string defaultSchema = "dbo")
+    public static DccResult CheckDeadColumns(this DbContext dbContext, string defaultSchema = "dbo", string[] schemasToExclude = null)
     {
         var result = new DccResult();
 
@@ -15,8 +16,8 @@ public static class DeadChecker
 
         var cs = dbContext.Database.GetConnectionString();
 
-        var sqlTables = dbReader.GetTables(cs);
-        var efTables = efReader.GetTables(dbContext, defaultSchema);
+        var sqlTables = dbReader.GetTables(cs).FilterSchemas(schemasToExclude);
+        var efTables = efReader.GetTables(dbContext, defaultSchema).FilterSchemas(schemasToExclude);
 
         Console.WriteLine($"Table: {sqlTables.Count} tables found in your database");
         Console.WriteLine($"Table: {efTables.Count} tables found in your model {Environment.NewLine}");
@@ -61,10 +62,5 @@ public static class DeadChecker
 
         resultTable = result.FindTable(table);
         resultTable.Columns.Add(column);
-    }
-
-    private static DccTable FindTable(this DccResult result, DccTable table)
-    {
-        return result.MissingColumns.FirstOrDefault(mc => mc.Name == table.Name && mc.Schema == table.Schema);
     }
 }
