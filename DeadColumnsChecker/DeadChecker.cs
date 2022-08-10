@@ -24,7 +24,8 @@ public static class DeadChecker
 
         foreach (var sqlTable in sqlTables)
         {
-            var efTable = efTables.FirstOrDefault(et => et.Name == sqlTable.Name && et.Schema == sqlTable.Schema);
+            var efTable = efTables.FirstOrDefault(et => et.Name.Equals(sqlTable.Name, StringComparison.InvariantCultureIgnoreCase)
+                                                     && et.Schema.Equals(sqlTable.Schema, StringComparison.InvariantCultureIgnoreCase));
 
             if (efTable is null)
             {
@@ -38,7 +39,7 @@ public static class DeadChecker
                 Console.WriteLine($"-- Table: {sqlTable.Name} --");
                 foreach (var sqlColumn in sqlTable.Columns)
                 {
-                    var efColumn = efTable.Columns.FirstOrDefault(ec => ec.Name == sqlColumn.Name);
+                    var efColumn = efTable.Columns.FirstOrDefault(ec => ec.Name.Equals(sqlColumn.Name, StringComparison.OrdinalIgnoreCase));
                     if (efColumn is null)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;

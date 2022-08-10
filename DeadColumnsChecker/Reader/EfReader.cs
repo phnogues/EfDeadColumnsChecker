@@ -13,7 +13,8 @@ public class EfReader
             Schema = e.GetSchema() ?? defaultSchema,
             Columns = e.GetProperties().Select(p => new DccColumn()
             {
-                Name = p.GetColumnBaseName()
+                Name = p.GetColumnBaseName(),
+                Type = p.GetColumnType()
             }).ToList()
         }).ToList();
     }
