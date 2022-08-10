@@ -1,4 +1,4 @@
-name: .NET
+name: publish to nuget
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  publish:
+    name: build, pack & publish
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Publish EfDeadColumnsChecker
-      uses: brandedoutcast/publish-nuget@v2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: DeadColumnsChecker/DeadColumnsChecker.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
