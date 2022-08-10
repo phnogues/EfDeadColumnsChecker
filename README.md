@@ -8,5 +8,6 @@ From anywhere where you can access to your DbContext, call the extension method 
 using (var context = new EntitiesDb())
 {
    var result = context.CheckDeadColumns();
+   var csv = result.ToCsv(); // can be exported to a csv
 }
 ```
