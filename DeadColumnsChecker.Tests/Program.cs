@@ -5,7 +5,7 @@ Console.WriteLine("Test DeadColumns checker");
 
 using (var context = new EntitiesDb())
 {
-    context.CheckDeadColumns();
+   var result = context.CheckDeadColumns();
 }
 
 Console.ReadKey();

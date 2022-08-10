@@ -1,12 +1,15 @@
-﻿using DeadColumnsChecker.Reader;
+﻿using DeadColumnsChecker.Model;
+using DeadColumnsChecker.Reader;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeadColumnsChecker;
 
 public static class DeadChecker
 {
-    public static void CheckDeadColumns(this DbContext dbContext, string defaultSchema = "dbo")
+    public static DccResult CheckDeadColumns(this DbContext dbContext, string defaultSchema = "dbo")
     {
+        var result = new DccResult();
+
         var dbReader = new DbReader();
         var efReader = new EfReader();
 
@@ -26,6 +29,7 @@ public static class DeadChecker
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Table: {sqlTable.Name} is not in your model");
+                result.MissingTables.Add(sqlTable);
             }
             else
             {
@@ -38,9 +42,29 @@ public static class DeadChecker
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"Column: {sqlColumn.Name} is not in your model");
+                        AddMissingColumnToResult(sqlTable, sqlColumn, result);
                     }
                 }
             }
         }
+
+        return result;
+    }
+
+    private static void AddMissingColumnToResult(DccTable table, DccColumn column, DccResult result)
+    {
+        var resultTable = result.FindTable(table);
+        if (resultTable is null)
+        {
+            result.MissingColumns.Add(new DccTable() { Name = table.Name, Schema = table.Schema });
+        }
+
+        resultTable = result.FindTable(table);
+        resultTable.Columns.Add(column);
+    }
+
+    private static DccTable FindTable(this DccResult result, DccTable table)
+    {
+        return result.MissingColumns.FirstOrDefault(mc => mc.Name == table.Name && mc.Schema == table.Schema);
     }
 }

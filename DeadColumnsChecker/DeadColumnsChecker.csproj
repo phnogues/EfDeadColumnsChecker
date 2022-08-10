@@ -5,7 +5,27 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Pierre-Henri Nogues</Authors>
+    <Company>PierreHenri.fr</Company>
+    <Description>A package to display not used columns in your sql server database based on your entity framework DbContext </Description>
+    <PackageProjectUrl>https://github.com/phsoftware/EfDeadColumnsChecker</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/phsoftware/EfDeadColumnsChecker</RepositoryUrl>
+    <PackageTags>EfCore;.Net;sql server</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
