@@ -14,3 +14,7 @@ using (var context = new EntitiesDb())
    var csv = result.ToCsv(); // can be exported to a csv
 }
 ```
+
+## Available as a nuget package Nuget
+[![NuGet version (DeadColumnsChecker)](https://img.shields.io/nuget/v/DeadColumnsChecker.svg?style=flat-square)](https://www.nuget.org/packages/DeadColumnsChecker/)
+
